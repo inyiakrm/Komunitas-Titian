@@ -1,0 +1,69 @@
+---
+layout: default
+---
+<div class="container">
+  <!-- Sidebar kiri untuk navigasi -->
+  <nav class="sidebar-left">
+    <h2>Daftar Isi</h2>
+    <ul id="table-of-contents">
+      {% if page.toc %}
+        {{ page.toc }}
+      {% else %}
+        {% assign h2_count = content | split: '<h2' | size | minus: 1 %}
+        {% if h2_count > 0 %}
+          {% assign headings = content | split: '<h2' %}
+          {% for heading in headings %}
+            {% if forloop.first == false %}
+              {% assign heading_text = heading | split: '</h2>' | first | split: '>' | last %}
+              {% assign heading_id = heading_text | slugify %}
+              <li>
+                <a href="#{{ heading_id }}">{{ heading_text }}</a>
+                {% assign sub_heading_check = heading | split: '<h3' %}
+                {% assign sub_count = sub_heading_check | size | minus: 1 %}
+                {% if sub_count > 0 %}
+                  <ul>
+                  {% for sub_section in sub_heading_check %}
+                    {% if forloop.first == false %}
+                      {% assign sub_text = sub_section | split: '</h3>' | first | split: '>' | last %}
+                      {% assign sub_id = sub_text | slugify %}
+                      <li><a href="#{{ sub_id }}">{{ sub_text }}</a></li>
+                    {% endif %}
+                  {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <li>Daftar isi tidak tersedia</li>
+        {% endif %}
+      {% endif %}
+    </ul>
+  </nav>
+
+  <!-- Konten utama di tengah -->
+  <main class="main-content">
+    <h1>{{ page.title }}</h1>
+    {% if page.book_title and page.author %}
+    <p class="subtitle">Buku <i>{{ page.book_title }}</i> karangan {{ page.author }}</p>
+    {% endif %}
+
+    {{ content }}
+  </main>
+
+  <!-- Sidebar kanan untuk poin-poin penting -->
+  <aside class="sidebar-right">
+    <h2>Poin Penting</h2>
+    <div id="key-points">
+      <ul>
+        {% if page.key_points %}
+          {% for point in page.key_points %}
+            <li><i class="fas fa-check-circle"></i> {{ point }}</li>
+          {% endfor %}
+        {% else %}
+          <li><i class="fas fa-check-circle"></i> Belum ada poin penting</li>
+        {% endif %}
+      </ul>
+    </div>
+  </aside>
+</div>
