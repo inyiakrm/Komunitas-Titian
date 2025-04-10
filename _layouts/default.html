@@ -9,19 +9,19 @@
 </head>
 <body>
   <header>
-    <h1>OTA LAPAU KOMUNITAS TITIAN</h1>
+    <h1>Catatan Membaca</h1>
     {% if page.subtitle %}
     <p class="subtitle">{{ page.subtitle }}</p>
     {% endif %}
   </header>
-
+  
   {{ content }}
-
+  
   <footer>
     <p>© <span id="current-year">2023</span> Nama Anda - Catatan Pembacaan</p>
     <script>document.getElementById('current-year').textContent = new Date().getFullYear();</script>
   </footer>
-
+  
   <script>
   document.addEventListener('DOMContentLoaded', function() {
     // Tambahkan ID ke semua h2 dan h3 yang belum memiliki ID
@@ -31,7 +31,7 @@
         heading.id = heading.textContent.trim().toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-');
       }
     });
-
+    
     // Aktifkan link daftar isi
     var tocLinks = document.querySelectorAll('#table-of-contents a');
     tocLinks.forEach(function(link) {
@@ -44,13 +44,70 @@
             top: targetElement.offsetTop - 20,
             behavior: 'smooth'
           });
-
+          
           // Tambahkan class active ke link yang diklik
           tocLinks.forEach(function(l) { l.classList.remove('active'); });
           this.classList.add('active');
         }
       });
     });
+    
+    // Kode accordion menu
+    // Tambahkan event listener untuk item menu dengan sub-menu
+    var menuItems = document.querySelectorAll('.sidebar-left > ul > li');
+    
+    menuItems.forEach(function(item) {
+      // Periksa apakah item memiliki sub-menu
+      var subMenu = item.querySelector('ul');
+      if (subMenu) {
+        // Tambahkan class untuk styling
+        item.classList.add('has-submenu');
+        
+        // Tambahkan icon untuk indikator expand/collapse
+        var link = item.querySelector('a');
+        var indicator = document.createElement('span');
+        indicator.className = 'submenu-indicator';
+        indicator.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        link.appendChild(indicator);
+        
+        // Default: sembunyikan sub-menu
+        subMenu.style.display = 'none';
+        
+        // Tambahkan event click
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Toggle sub-menu
+          if (subMenu.style.display === 'none') {
+            subMenu.style.display = 'block';
+            indicator.innerHTML = '<i class="fas fa-chevron-down"></i>';
+            item.classList.add('expanded');
+          } else {
+            subMenu.style.display = 'none';
+            indicator.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            item.classList.remove('expanded');
+          }
+        });
+      }
+    });
+    
+    // Buka sub-menu untuk item aktif saat halaman dimuat
+    var activeLink = document.querySelector('.sidebar-left a.active');
+    if (activeLink) {
+      var activeParent = activeLink.closest('li.has-submenu');
+      if (activeParent) {
+        var subMenu = activeParent.querySelector('ul');
+        var indicator = activeParent.querySelector('.submenu-indicator');
+        
+        if (subMenu) {
+          subMenu.style.display = 'block';
+          if (indicator) {
+            indicator.innerHTML = '<i class="fas fa-chevron-down"></i>';
+          }
+          activeParent.classList.add('expanded');
+        }
+      }
+    }
   });
   </script>
 </body>

@@ -243,6 +243,31 @@ figcaption {
     color: #666;
 }
 
+/* ====== Styling untuk Accordion Menu di Sidebar ====== */
+.sidebar-left li.has-submenu > a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .sidebar-left .submenu-indicator {
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+  }
+  
+  .sidebar-left li.expanded > a {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .sidebar-left ul ul {
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .sidebar-left li.has-submenu > a:hover .submenu-indicator {
+    color: var(--secondary-color);
+  }
+  
 /* ====== Responsif untuk Perangkat Mobile ====== */
 @media (max-width: 992px) {
     .container {
